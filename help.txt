@@ -1,0 +1,13 @@
+streamlit==1.28.0
+python-dotenv==1.0.0
+google-generativeai==0.3.1
+youtube_transcript_api==0.6.1
+fpdf==1.7.2
+reportlab==3.6.12
+
+#run the below line in terminal (remove # )
+# pip install streamlit dotenv google-generativeai youtube-transcript-api gtts googletrans==4.0.0-rc1 matplotlib wordcloud reportlab
+
+#run this command in terminal "python -m streamlit run app.py"
+
+if code didnt run then run pip install googletrans==4.0.0-rc1
