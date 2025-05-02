@@ -36,9 +36,36 @@ def extract_video_id(url):
 
 def get_transcript(video_id):
     try:
-        return YouTubeTranscriptApi.get_transcript(video_id)
-    except (TranscriptsDisabled, NoTranscriptFound):
-        st.warning("No transcript is available for this video. Try another one.")
+        # Try with different proxy configurations if provided in secrets
+        proxies = None
+        if hasattr(st.secrets, "PROXY_URL"):
+            proxies = {
+                'http': st.secrets.PROXY_URL,
+                'https': st.secrets.PROXY_URL
+            }
+        
+        # First try without proxy
+        try:
+            return YouTubeTranscriptApi.get_transcript(video_id)
+        except Exception as e:
+            if not proxies:
+                raise e
+            
+            # If first attempt failed and proxy is configured, try with proxy
+            return YouTubeTranscriptApi.get_transcript(video_id, proxies=proxies)
+            
+    except TranscriptsDisabled:
+        st.error("Transcripts are disabled for this video.")
+        return None
+    except NoTranscriptFound:
+        st.error("No transcript found for this video.")
+        return None
+    except Exception as e:
+        error_msg = str(e)
+        if "RequestBlocked" in error_msg:
+            st.error("YouTube is blocking our request. This can happen due to rate limiting. Please try again in a few minutes or try a different video.")
+        else:
+            st.error(f"Error fetching transcript: {error_msg}")
         return None
 
 def generate_summary(text):
