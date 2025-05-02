@@ -15,9 +15,14 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import shutil
 
-# Load environment variables and configure API
-load_dotenv()
-GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+# Load API key from environment or streamlit secrets
+load_dotenv()  # will not raise error if .env doesn't exist
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY') or st.secrets.get("GOOGLE_API_KEY")
+
+if not GOOGLE_API_KEY:
+    st.error("No API key found. Please set GOOGLE_API_KEY in .env file or Streamlit secrets.")
+    st.stop()
+
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # Initialize model
