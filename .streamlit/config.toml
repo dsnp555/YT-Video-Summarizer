@@ -1,8 +1,12 @@
 [theme]
-primaryColor = "#1976d2"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f0f2f6"
-textColor = "#262730"
+# switch to built-in dark base
+base = "dark"
+
+# accent + colors for dark theme (tweak if you like)
+primaryColor = "#1DB954"
+backgroundColor = "#0E1117"
+secondaryBackgroundColor = "#262730"
+textColor = "#FAFAFA"
 font = "sans serif"
 
 [server]
