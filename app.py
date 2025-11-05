@@ -10,7 +10,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from gtts import gTTS
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from datetime import datetime, timedelta
@@ -228,12 +228,15 @@ def translate_text(text, target_language):
         return "No content available for translation."
         
     try:
-        translator = Translator()
-        result = translator.translate(text, dest=target_language)
-        return result.text
+        # Limit text length for translation (deep-translator has a 5000 char limit per request)
+        if len(text) > 4500:
+            text = text[:4500] + "..."
+        
+        translated = GoogleTranslator(source='auto', target=target_language).translate(text)
+        return translated
     except Exception as e:
         st.error(f"Translation error: {str(e)}")
-        st.info("💡 Tip: googletrans can be unreliable. Consider using Google Cloud Translation API for production.")
+        st.info("💡 Tip: Translation services have character limits. Try with shorter text.")
         return "Translation failed. Please try again or use a different translation service."
 
 def create_word_cloud(text):
